@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-import com.tikal.jenkins.plugins.multijob.MultiJobBuild.SubBuild;
+import groovy.io.FileType;
 import hudson.FilePath;
 //import java.io.Writer.write;
 import jenkins.model.Jenkins;
