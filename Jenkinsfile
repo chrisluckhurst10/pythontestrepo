@@ -1,4 +1,6 @@
 #!/usr/bin/env groovy
+import hudson.FilePath
+import 
 
 //pipeline {
 //    agent any 
