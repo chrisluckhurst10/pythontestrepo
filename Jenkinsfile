@@ -2,7 +2,7 @@
 
 import groovy.io.FileType;
 import hudson.FilePath;
-//import java.io.Writer.write;
+import java.io.File;
 import jenkins.model.Jenkins;
 
 //pipeline {
