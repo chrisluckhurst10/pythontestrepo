@@ -1,5 +1,7 @@
 #!/usr/bin/env groovy
 import hudson.FilePath;
+import java.io.Writer.write;
+import jenkins.model.Jenkins;
 
 //pipeline {
 //    agent any 
