@@ -18,7 +18,11 @@ node {
     writeFile file: "output/usefulfile.txt", text: "This file is useful, need to archive it"
             
             //write a useless output file, which doesn't need to be archived
-    writeFile file: "output/uselessfile.md"
+    writeFile file: "output/uselessfile.md", text: "This file is useless, no need to archive it"
+    
+    stage "Archive build output"
+    
+    archiveArtifacts artifacts: 'output/*.txt', excludes: 'output/*.md'
     //    }
     //}
 }
