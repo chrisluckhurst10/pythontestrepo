@@ -1,28 +1,40 @@
-#!/usr/bin/env groovy
-
-import groovy.io.FileType;
-import hudson.FilePath;
-import java.io.File;
-import jenkins.model.Jenkins;
-
-//pipeline {
-//    agent any 
+pipeline {
+    agent any 
+    environment {
+        ARTIFACTORY_CREDS = credentials("Artifactory")
+        ARTIFACTORY_STRING = "quickstart.cloudera:8081/artifactory/api/pypi/pypi-local/simple"
+        
+        DIR = "/home/cloudera/"
+        
+        ARTIFACTS_DIR = "${DIR}/artifacts"
+        CREDS_STRING = "${ARTIFACTORY_CREDS_USR}:${ARTIFACTORY_CREDS_PSW}"
+    }
     
-//    stages {
-node {
-    stage "Create output build"
+    stages {
+        stage("Deploy") {
             //make an output directory
-    sh "mkdir -p output"
+            sh "mkdir -p ${ARTIFACTS_DIR}"
             
-            //write a useful output file, which needs to be archived
-    writeFile file: "output/usefulfile.txt", text: "This file is useful, need to archive it"
+            ARTIFACTORY_PACKAGE_DIR = "pythontest"
+            SITE_PACKAGES_DIR = "$(pip show $ARTIFACTORY_PACKAGE_DIR/* | grep Location | cut -d ' ' -f 2)"
             
-            //write a useless output file, which doesn't need to be archived
-    writeFile file: "output/uselessfile.md", text: "This file is useless, no need to archive it"
-    
-    stage "Archive build output"
-    
-    archiveArtifacts artifacts: 'output/*.txt', excludes: 'output/*.md'
-    //    }
-    //}
+            
+            
+            sh '''
+                for module in `cat $(ls -d1 ${SITE_PACKAGES_DIR}/* | grep "${ARTIFACTS_DIR}-.*egg.info$")/top_level.txt`; do
+                    echo -n "Preparing $module"
+                    cd $SITE_PACKAGES_DIR && zip -r ${ARTIFACTS_DIR}/${module}.zip "$module" > /dev/null
+                    echo "Done"
+                    echo "Transferring $module to HDFS..."
+                    hdfs dfs -copyFromLocal -f $ARTIFACTS_DIR/${module}.zip /user/cloudera/pythontest > /dev/null
+                done
+
+            
+            '''
+            
+
+        }
+    }
 }
+//pip install -U pythontest -i "http://admin:admin@quickstart.cloudera:8081/artifactory/api/pypi/pypi-local/simple" \
+//--trusted-host quickstart.cloudera --user
