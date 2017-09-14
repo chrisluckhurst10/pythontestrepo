@@ -15,20 +15,21 @@ pipeline {
             //make an output directory
             sh "mkdir -p ${ARTIFACTS_DIR}"
             
+            sh "pip install -U 
+            
             ARTIFACTORY_PACKAGE_DIR = "pythontest"
             SITE_PACKAGES_DIR = "$(pip show $ARTIFACTORY_PACKAGE_DIR/* | grep Location | cut -d ' ' -f 2)"
             
             
-            
             sh '''
-                for module in `cat $(ls -d1 ${SITE_PACKAGES_DIR}/* | grep "${ARTIFACTS_DIR}-.*egg.info$")/top_level.txt`; do
+                for module in `cat $(ls -d1 ${SITE_PACKAGES_DIR}/* | grep "${ARTIFACTORY_PACKAGE_DIR}-.*egg.info$")/top_level.txt`; do
                     echo -n "Preparing $module"
                     cd $SITE_PACKAGES_DIR && zip -r ${ARTIFACTS_DIR}/${module}.zip "$module" > /dev/null
                     echo "Done"
                     echo "Transferring $module to HDFS..."
                     hdfs dfs -copyFromLocal -f $ARTIFACTS_DIR/${module}.zip /user/cloudera/pythontest > /dev/null
                 done
-
+                rm -rf ${ARTIFACTS_DIR}
             
             '''
             
