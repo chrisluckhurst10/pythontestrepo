@@ -15,7 +15,10 @@ pipeline {
             //make an output directory
             sh "mkdir -p ${ARTIFACTS_DIR}"
             
-            sh "pip install -U 
+            sh '''
+                pip install -U pythontest -i "http://admin:admin@quickstart.cloudera:8081/artifactory/api/pypi/pypi-local/simple" \
+                --trusted-host quickstart.cloudera --user
+            '''
             
             ARTIFACTORY_PACKAGE_DIR = "pythontest"
             SITE_PACKAGES_DIR = "$(pip show $ARTIFACTORY_PACKAGE_DIR/* | grep Location | cut -d ' ' -f 2)"
