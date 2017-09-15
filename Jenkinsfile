@@ -21,10 +21,9 @@ pipeline {
             '''
             
             ARTIFACTORY_PACKAGE_DIR = "pythontest"
-            SITE_PACKAGES_DIR = "$(pip show $ARTIFACTORY_PACKAGE_DIR/* | grep Location | cut -d ' ' -f 2)"
-            
             
             sh '''
+                SITE_PACKAGES_DIR = "$(pip show $ARTIFACTORY_PACKAGE_DIR/* | grep Location | cut -d ' ' -f 2)"
                 for module in `cat $(ls -d1 ${SITE_PACKAGES_DIR}/* | grep "${ARTIFACTORY_PACKAGE_DIR}-.*egg.info$")/top_level.txt`; do
                     echo -n "Preparing $module"
                     cd $SITE_PACKAGES_DIR && zip -r ${ARTIFACTS_DIR}/${module}.zip "$module" > /dev/null
