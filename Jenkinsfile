@@ -15,7 +15,7 @@ pipeline {
         stage("Deploy") {
             steps {
                 script {
-                    sh "deploy.sh"
+                    sh "sh deploy.sh"
                     //make an output directory
 //                    sh "mkdir -p ${ARTIFACTS_DIR}"
             
