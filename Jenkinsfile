@@ -3,6 +3,7 @@ pipeline {
     environment {
         ARTIFACTORY_CREDS = credentials("Artifactory")
         ARTIFACTORY_STRING = "quickstart.cloudera:8081/artifactory/api/pypi/pypi-local/simple"
+        ARTIFACTORY_PACKAGE_DIR = "pythontest"
         
         DIR = "/home/cloudera/"
         
@@ -22,8 +23,6 @@ pipeline {
                         pip install -U pythontest -i "http://admin:admin@quickstart.cloudera:8081/artifactory/api/pypi/pypi-local/simple" \
                         --trusted-host quickstart.cloudera --user
                     '''
-            
-                    ARTIFACTORY_PACKAGE_DIR = "pythontest"
             
                     sh '''
                         SITE_PACKAGES_DIR = "$(pip show $ARTIFACTORY_PACKAGE_DIR/* | grep Location | cut -d ' ' -f 2)"
