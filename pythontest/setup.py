@@ -9,7 +9,8 @@ config = {
     'author_email': "some-email@somesite.com",
     'install_requires': ['pytest>=1.0.0'],
     'packages': ['pythontest'],
-    'name': 'pythontest',
+    'name': 'pythonictest',
+    'version': '0.0.2',
 }
 
 setup(**config)

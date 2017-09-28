@@ -1,0 +1,7 @@
+setup.py
+pythonictest.egg-info/PKG-INFO
+pythonictest.egg-info/SOURCES.txt
+pythonictest.egg-info/dependency_links.txt
+pythonictest.egg-info/requires.txt
+pythonictest.egg-info/top_level.txt
+pythontest/__init__.py
